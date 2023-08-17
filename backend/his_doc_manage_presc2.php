@@ -4,6 +4,28 @@
   include('assets/inc/checklogin.php');
   check_login();
   $doc_id = $_SESSION['doc_id'];
+  /*
+  Doc cant delete a prescription
+  Uncomment the code to enable
+  if(isset($_GET['delete_pres_number']))
+  {
+        $id=intval($_GET['delete_pres_number']);
+        $adn="DELETE FROM his_prescriptions WHERE pres_number=?";
+        $stmt= $mysqli->prepare($adn);
+        $stmt->bind_param('i',$id);
+        $stmt->execute();
+        $stmt->close();	 
+  
+          if($stmt)
+          {
+            $success = "Prescription Records Deleted";
+          }
+            else
+            {
+                $err = "Try Again Later";
+            }
+    }
+    */
 ?>
 
 <!DOCTYPE html>
@@ -41,11 +63,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
-                                            <li class="breadcrumb-item active">View Pharmaceutical Category</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmacy</a></li>
+                                            <li class="breadcrumb-item active">Manage Prescriptions</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Pharmaceutical Categories</h4>
+                                    <h4 class="page-title">Manage Prescriptions</h4>
                                 </div>
                             </div>
                         </div>     
@@ -78,8 +100,12 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Category Name</th>
-                                                <th data-hide="phone">Category Vendor</th>
+                                                <th data-toggle="true">Patient Name</th>
+                                                <th data-hide="phone">Patient Number</th>
+                                                <th data-hide="phone">Address</th>
+                                                <th data-hide="phone">Ailment</th>
+                                                <th data-hide="phone">Age</th>
+                                                <th data-hide="phone">Category</th>
                                                 <th data-hide="phone">Action</th>
                                             </tr>
                                             </thead>
@@ -88,7 +114,8 @@
                                                 *get details of allpatients
                                                 *
                                             */
-                                                $ret="SELECT * FROM  his_pharmaceuticals_categories ORDER BY RAND() "; 
+                                                $ret="SELECT * FROM  his_prescriptions ORDER BY RAND() "; 
+                                                //sql code to get to ten docs  randomly
                                                 $stmt= $mysqli->prepare($ret) ;
                                                 $stmt->execute() ;//ok
                                                 $res=$stmt->get_result();
@@ -100,9 +127,18 @@
                                                 <tbody>
                                                 <tr>
                                                     <td><?php echo $cnt;?></td>
-                                                    <td><?php echo $row->pharm_cat_name;?></td>
-                                                    <td><?php echo $row->pharm_cat_vendor;?></td>
-                                                    <td><a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a></td>
+                                                    <td><?php echo $row->pres_pat_name;?></td>
+                                                    <td><?php echo $row->pres_pat_number;?></td>
+                                                    <td><?php echo $row->pres_pat_addr;?></td>
+                                                    <td><?php echo $row->pres_pat_ailment;?></td>
+                                                    <td><?php echo $row->pres_pat_age;?> Years</td>
+                                                    <td><?php echo $row->pres_pat_type;?></td>
+                                                    <td>
+                                                        <a href="his_doc_view_single_pres2.php?pres_number=<?php echo $row->pres_number;?>&&pres_id=<?php echo $row->pres_id;?>" class="badge badge-success"><i class="fas fa-eye"></i> View</a>
+                                                        <a href="his_doc_upate_single_pres2.php?pres_number=<?php echo $row->pres_number;?>" class="badge badge-warning"><i class="fas fa-eye-dropper "></i> Update</a>
+                                                        <!--<a href="his_admin_manage_presc.php?delete_pres_number=<?php echo $row->pres_number;?>" class="badge badge-danger"><i class=" fas fa-trash-alt "></i> Delete</a>-->
+
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>

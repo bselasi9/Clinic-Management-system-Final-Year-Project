@@ -17,11 +17,11 @@
         <div id="wrapper">
 
             <!-- Topbar Start -->
-                <?php include('assets/inc/nav2.php');?>
+                <?php include('assets/inc/nav4.php');?>
             <!-- end Topbar -->
 
             <!-- ========== Left Sidebar Start ========== -->
-                <?php include("assets/inc/sidebar2.php");?>
+                <?php include("assets/inc/sidebar4.php");?>
             <!-- Left Sidebar End -->
 
             <!-- ============================================================== -->
@@ -41,11 +41,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
-                                            <li class="breadcrumb-item active">View Pharmaceutical Category</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Laboratory</a></li>
+                                            <li class="breadcrumb-item active">Laboratory Records</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Pharmaceutical Categories</h4>
+                                    <h4 class="page-title">Patient Details</h4>
                                 </div>
                             </div>
                         </div>     
@@ -78,8 +78,10 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Category Name</th>
-                                                <th data-hide="phone">Category Vendor</th>
+                                                <th data-toggle="true">Patient Name</th>
+                                                <th data-hide="phone">Patient Number</th>
+                                                <th data-hide="phone">Patient Ailment</th>
+                                                <th data-hide="phone">Date Lab Test Conducted</th>
                                                 <th data-hide="phone">Action</th>
                                             </tr>
                                             </thead>
@@ -88,21 +90,25 @@
                                                 *get details of allpatients
                                                 *
                                             */
-                                                $ret="SELECT * FROM  his_pharmaceuticals_categories ORDER BY RAND() "; 
+                                                $ret="SELECT * FROM  his_laboratory ORDER BY RAND() "; 
+                                                //sql code to get to ten docs  randomly
                                                 $stmt= $mysqli->prepare($ret) ;
                                                 $stmt->execute() ;//ok
                                                 $res=$stmt->get_result();
                                                 $cnt=1;
                                                 while($row=$res->fetch_object())
                                                 {
+                                                    $mysqlDateTime = $row->lab_date_rec;
                                             ?>
 
                                                 <tbody>
                                                 <tr>
                                                     <td><?php echo $cnt;?></td>
-                                                    <td><?php echo $row->pharm_cat_name;?></td>
-                                                    <td><?php echo $row->pharm_cat_vendor;?></td>
-                                                    <td><a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a></td>
+                                                    <td><?php echo $row->lab_pat_name;?></td>
+                                                    <td><?php echo $row->lab_pat_number;?></td>
+                                                    <td><?php echo $row->lab_pat_ailment;?></td>
+                                                    <td><?php echo date("d/m/Y", strtotime($mysqlDateTime));?></td>
+                                                    <td><a href="his_doc_view_single_lab_record.php?lab_id=<?php echo $row->lab_id ;?>&&lab_number=<?php echo $row->lab_number ;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View Lab Report</a></td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>

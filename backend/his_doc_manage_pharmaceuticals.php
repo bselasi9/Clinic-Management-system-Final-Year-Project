@@ -4,6 +4,28 @@
   include('assets/inc/checklogin.php');
   check_login();
   $doc_id = $_SESSION['doc_id'];
+  /*
+  Docto has no previlidge to delete a pharmaceutical - uncomment this code if you want em to
+
+  if(isset($_GET['delete_pharm_name']))
+  {
+        $id=intval($_GET['delete_pharm_name']);
+        $adn="delete from his_pharmaceuticals where phar_id=?";
+        $stmt= $mysqli->prepare($adn);
+        $stmt->bind_param('i',$id);
+        $stmt->execute();
+        $stmt->close();	 
+  
+          if($stmt)
+          {
+            $success = "Pharmaceutical Records Deleted";
+          }
+            else
+            {
+                $err = "Try Again Later";
+            }
+    }
+    */
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +39,11 @@
         <div id="wrapper">
 
             <!-- Topbar Start -->
-                <?php include('assets/inc/nav2.php');?>
+                <?php include('assets/inc/nav.php');?>
             <!-- end Topbar -->
 
             <!-- ========== Left Sidebar Start ========== -->
-                <?php include("assets/inc/sidebar2.php");?>
+                <?php include("assets/inc/sidebar.php");?>
             <!-- Left Sidebar End -->
 
             <!-- ============================================================== -->
@@ -42,10 +64,10 @@
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
-                                            <li class="breadcrumb-item active">View Pharmaceutical Category</li>
+                                            <li class="breadcrumb-item active">Manage Pharmaceuticals</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Pharmaceutical Categories</h4>
+                                    <h4 class="page-title">Manage Pharmaceuticals </h4>
                                 </div>
                             </div>
                         </div>     
@@ -78,8 +100,11 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Category Name</th>
-                                                <th data-hide="phone">Category Vendor</th>
+                                                <th data-toggle="true"> Name</th>
+                                                <th data-hide="phone">Barcode</th>
+                                                <th data-hide="phone">Vendor</th>
+                                                <th data-hide="phone">Category</th>
+                                                <th data-hide="phone">Quantity</th>
                                                 <th data-hide="phone">Action</th>
                                             </tr>
                                             </thead>
@@ -88,7 +113,7 @@
                                                 *get details of allpatients
                                                 *
                                             */
-                                                $ret="SELECT * FROM  his_pharmaceuticals_categories ORDER BY RAND() "; 
+                                                $ret="SELECT * FROM  his_pharmaceuticals ORDER BY RAND() "; 
                                                 $stmt= $mysqli->prepare($ret) ;
                                                 $stmt->execute() ;//ok
                                                 $res=$stmt->get_result();
@@ -100,9 +125,17 @@
                                                 <tbody>
                                                 <tr>
                                                     <td><?php echo $cnt;?></td>
-                                                    <td><?php echo $row->pharm_cat_name;?></td>
-                                                    <td><?php echo $row->pharm_cat_vendor;?></td>
-                                                    <td><a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a></td>
+                                                    <td><?php echo $row->phar_name;?></td>
+                                                    <td><?php echo $row->phar_bcode;?></td>
+                                                    <td><?php echo $row->phar_vendor;?></td>
+                                                    <td><?php echo $row->phar_cat;?></td>
+                                                    <td><?php echo $row->phar_qty;?> Cartons</td>
+                                                    <td>
+                                                        <a href="his_doc_view_single_pharm.php?phar_bcode=<?php echo $row->phar_bcode;?>" class="badge badge-success"><i class="far fa-eye "></i> View</a>
+                                                        <a href="his_doc_update_single_pharm.php?phar_bcode=<?php echo $row->phar_bcode;?>" class="badge badge-warning"><i class="fas fa-clipboard-check "></i> Update</a>
+                                                        <!--<a href="his_admin_manage_pharmaceuticals.php?delete_pharm_name=<?php echo $row->phar_id;?>" class="badge badge-danger"><i class="fas fa-trash-alt"></i> Delete</a>-->
+
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>

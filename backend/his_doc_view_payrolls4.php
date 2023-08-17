@@ -4,6 +4,31 @@
   include('assets/inc/checklogin.php');
   check_login();
   $doc_id = $_SESSION['doc_id'];
+
+  /*Doctor Cant delete their payrolls 
+  oh but if you need yours to be able to delete their payrolls
+  then uncomment this bunch of code
+  
+  if(isset($_GET['delete_pay_number']))
+  {
+        $id=intval($_GET['delete_pay_number']);
+        $adn="delete from his_payrolls where pay_number=?";
+        $stmt= $mysqli->prepare($adn);
+        $stmt->bind_param('i',$id);
+        $stmt->execute();
+        $stmt->close();	 
+  
+          if($stmt)
+          {
+            $success = "Payroll Record Deleted";
+          }
+            else
+            {
+                $err = "Try Again Later";
+            }
+    }
+    */
+
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +42,11 @@
         <div id="wrapper">
 
             <!-- Topbar Start -->
-                <?php include('assets/inc/nav2.php');?>
+                <?php include('assets/inc/nav4.php');?>
             <!-- end Topbar -->
 
             <!-- ========== Left Sidebar Start ========== -->
-                <?php include("assets/inc/sidebar2.php");?>
+                <?php include("assets/inc/sidebar4.php");?>
             <!-- Left Sidebar End -->
 
             <!-- ============================================================== -->
@@ -41,11 +66,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
-                                            <li class="breadcrumb-item active">View Pharmaceutical Category</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Payroll</a></li>
+                                            <li class="breadcrumb-item active">View Payroll</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Pharmaceutical Categories</h4>
+                                    <h4 class="page-title">My Payrolls</h4>
                                 </div>
                             </div>
                         </div>     
@@ -78,18 +103,18 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Category Name</th>
-                                                <th data-hide="phone">Category Vendor</th>
+                                                <th data-toggle="true">My Name</th>
+                                                <th data-toggle="true">My Number</th>
+                                                <th data-hide="phone">Payroll Number</th>
+                                                <th data-hide="phone">My Salary</th>
                                                 <th data-hide="phone">Action</th>
                                             </tr>
                                             </thead>
                                             <?php
-                                            /*
-                                                *get details of allpatients
-                                                *
-                                            */
-                                                $ret="SELECT * FROM  his_pharmaceuticals_categories ORDER BY RAND() "; 
+                                                $pay_doc_number = $_SESSION['doc_number'];
+                                                $ret="SELECT  * FROM his_payrolls WHERE pay_doc_number = ?";
                                                 $stmt= $mysqli->prepare($ret) ;
+                                                $stmt->bind_param('s',$pay_doc_number);
                                                 $stmt->execute() ;//ok
                                                 $res=$stmt->get_result();
                                                 $cnt=1;
@@ -100,9 +125,16 @@
                                                 <tbody>
                                                 <tr>
                                                     <td><?php echo $cnt;?></td>
-                                                    <td><?php echo $row->pharm_cat_name;?></td>
-                                                    <td><?php echo $row->pharm_cat_vendor;?></td>
-                                                    <td><a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a></td>
+                                                    <td><?php echo $row->pay_doc_name;?></td>
+                                                    <td><?php echo $row->pay_doc_number;?></td>
+                                                    <td><?php echo $row->pay_number;?></td>   
+                                                    <td>$ <?php echo $row->pay_emp_salary;?></td>
+                                                 
+                                                    <td>
+                                                        <!--<a href="his_admin_manage_payrolls.php?delete_pay_number=<?php echo $row->pay_number;?>" class="badge badge-danger"><i class="fas fa-trash"></i> Delete</a>-->
+                                                        <a href="his_doc_view_single_payroll.php?pay_number=<?php echo $row->pay_number;?>" class="badge badge-success"><i class="fas fa-eye"></i> View | Print Payroll</a>
+
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>

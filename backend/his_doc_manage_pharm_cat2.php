@@ -4,6 +4,28 @@
   include('assets/inc/checklogin.php');
   check_login();
   $doc_id = $_SESSION['doc_id'];
+  
+  /* Doctor Has no Previldge to delete any record 
+    uncomment this code if you want em to delete records
+  if(isset($_GET['delete_pharm_cat']))
+  {
+        $id=intval($_GET['delete_pharm_cat']);
+        $adn="delete from his_pharmaceuticals_categories where pharm_cat_id=?";
+        $stmt= $mysqli->prepare($adn);
+        $stmt->bind_param('i',$id);
+        $stmt->execute();
+        $stmt->close();	 
+  
+          if($stmt)
+          {
+            $success = "Pharmaceutical Category Records Deleted";
+          }
+            else
+            {
+                $err = "Try Again Later";
+            }
+    }
+    */
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +64,10 @@
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
-                                            <li class="breadcrumb-item active">View Pharmaceutical Category</li>
+                                            <li class="breadcrumb-item active">Manage Pharmaceutical Category</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Pharmaceutical Categories</h4>
+                                    <h4 class="page-title">Manage Pharmaceutical Categories</h4>
                                 </div>
                             </div>
                         </div>     
@@ -102,7 +124,13 @@
                                                     <td><?php echo $cnt;?></td>
                                                     <td><?php echo $row->pharm_cat_name;?></td>
                                                     <td><?php echo $row->pharm_cat_vendor;?></td>
-                                                    <td><a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a></td>
+                                                    <td>
+                                                        <a href="his_doc_view_single_pharm_category2.php?pharm_cat_id=<?php echo $row->pharm_cat_id;?>" class="badge badge-success"><i class="far fa-eye "></i> View</a>
+                                                        <a href="his_doc_update_single_pharm_category2.php?pharm_cat_name=<?php echo $row->pharm_cat_name;?>" class="badge badge-warning"><i class="fas fa-clipboard-check "></i> Update</a>
+                                                       <!-- <a href="his_admin_manage_pharm_cat.php?delete_pharm_cat=<?php echo $row->pharm_cat_id;?>" class="badge badge-danger"><i class="fas fa-trash-alt "></i> Delete</a>-->
+
+
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>
