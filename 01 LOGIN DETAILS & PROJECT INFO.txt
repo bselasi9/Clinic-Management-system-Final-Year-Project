@@ -1,0 +1,33 @@
+1.Download the zip folder from Git hub Link
+2. Extract the file and copy clinic folder
+3.Paste inside root directory(for xampp xampp/htdocs, for wamp wamp/www, for lamp var/www/html)
+4. Open PHPMyAdmin (http://localhost/phpmyadmin)
+5. Create a database with name hmisphp
+6. Import hmisphp.sql file(given inside the zip package in SQL file folder)
+7.Run the script https://localhost/clinic-management-system/index.php (frontend)
+*
+
+
+**Database Name: hmisphp**
+
+**Developed by Bernard Selasi Kobinah Hegbor and Paa Kofi Annor Asante**
+
+**Recommended PHP Version 5.6, 7.4**
+
+
+**Admin Login Details**
+
+Email   : admin@mail.com
+Password: Password@123
+
+
+**Doctor Login Details**
+
+ID      : BAGV5
+Password: bhegbor1
+
+patient login details
+email: paa@gmail.com
+password:12345678
+
+
